@@ -37,11 +37,11 @@ export default function StatsPage() {
 
   return (
     <div className="min-h-screen bg-bg text-text">
-      <main className="max-w-3xl mx-auto px-6 py-10">
-        <div className="bg-card border-2 border-violet-950 p-6 rounded-2xl shadow-lg">
+      <main className="max-w-3xl mx-auto px-4 sm:px-6 py-10">
+        <div className="bg-card border-2 border-violet-950 p-4 sm:p-6 rounded-2xl shadow-lg">
           {/* Header */}
-          <div className="flex items-center justify-between mb-6">
-            <h2 className="text-2xl font-semibold tracking-tight text-violet-800">
+          <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between mb-6 gap-4 sm:gap-2">
+            <h2 className="text-xl sm:text-2xl font-semibold tracking-tight text-violet-800">
               Stats for: {"  "}
               <span className="font-mono bg-violet-500/20 text-violet-100 px-2 py-1 rounded">
                 {code}
@@ -64,7 +64,7 @@ export default function StatsPage() {
           ) : link ? (
             <div className="space-y-4">
               {/* Target URL with copy */}
-              <div className="flex items-center gap-2">
+              <div className="flex flex-wrap items-center gap-x-2 gap-y-1">
                 <strong className="text-violet-500">Target URL:</strong>
                 <a
                   href={link.url}
@@ -83,7 +83,7 @@ export default function StatsPage() {
               </div>
 
               {/* Short URL with copy */}
-              <div className="flex items-center gap-2">
+              <div className="flex flex-wrap items-center gap-x-2 gap-y-1">
                 <strong className="text-violet-500">Short URL:</strong>
                 <a
                   href={link.shortUrl}

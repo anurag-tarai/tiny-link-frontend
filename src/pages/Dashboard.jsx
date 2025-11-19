@@ -3,22 +3,20 @@ import { createLink, deleteLink, getAllLinks } from "../api";
 import Navbar from "../components/Navbar";
 import AddLinkForm from "../components/AddLinkForm";
 import LinksTable from "../components/LinkTable";
-import { useToast } from "../components/ToastContext"; // Import toast hook
+import { useToast } from "../components/ToastContext"; // Toast hook
 
 export default function Dashboard() {
   const [links, setLinks] = useState([]);
   const [loading, setLoading] = useState(false);
   const [err, setErr] = useState("");
   const { addToast } = useToast(); // Toast function
-
-  // inside your Dashboard component
   const [health, setHealth] = useState(null);
 
+  // Check backend health
   async function checkHealth() {
     try {
       const res = await fetch(`${import.meta.env.VITE_API_BASE}/healthz`);
       const data = await res.json();
-      // assuming backend sends uptime in seconds (if not, we just skip it)
       setHealth({
         ok: data.ok,
         version: data.version || "unknown",
@@ -31,8 +29,7 @@ export default function Dashboard() {
 
   useEffect(() => {
     checkHealth();
-    // optional: refresh every 30 seconds
-    const interval = setInterval(checkHealth, 30000);
+    const interval = setInterval(checkHealth, 30000); // refresh every 30s
     return () => clearInterval(interval);
   }, []);
 
@@ -80,32 +77,29 @@ export default function Dashboard() {
     }
   }
 
-  console.log(health);
-  
-
   return (
     <div className="min-h-screen bg-bg text-text">
-      <main className="1 max-w-6xl mx-auto px-6 bg-bg">
+      <main className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8">
         {/* Page Title */}
         <h1 className="text-3xl font-semibold tracking-tight mb-8 text-accent">
           Your Links
         </h1>
 
         {/* 2 Column Layout */}
-        <div className="grid md:grid-cols-2 gap-8">
+        <div className="grid grid-cols-1 md:grid-cols-2 gap-6 md:gap-8">
           {/* Create Link Form */}
-          <div className="bg-card p-6 rounded-2xl shadow-lg border-2 border-l-violet-700">
+          <div className="bg-card p-5 sm:p-6 rounded-2xl shadow-lg border-2 border-l-violet-700">
             <AddLinkForm onCreate={handleCreate} />
           </div>
 
-          {/* System Card */}
-          <div className="bg-card p-6 rounded-2xl shadow-lg border-2 border-r-violet-700">
-            <h3 className="text-lg font-medium mb-3 text-accent">
-              Healthcheck
-            </h3>
+          {/* System Card / Health */}
+          <div className="bg-card p-5 sm:p-6 rounded-2xl shadow-lg border-2 border-r-violet-700">
+            <h3 className="text-lg font-medium mb-3 text-accent">Healthcheck</h3>
 
             {!health ? (
-              <p className="text-subtle text-sm">Health: <span className="font-semibold">Checking...</span></p>
+              <p className="text-subtle text-sm">
+                Health: <span className="font-semibold">Checking...</span>
+              </p>
             ) : (
               <>
                 <p className="text-subtle text-sm">
@@ -136,7 +130,7 @@ export default function Dashboard() {
         </div>
 
         {/* Links Table */}
-        <div className="mt-10">
+        <div className="mt-10 overflow-x-auto">
           {loading ? (
             <div className="bg-card p-4 rounded-xl shadow text-center text-subtle">
               Loading links...
