@@ -70,7 +70,8 @@ export default function StatsPage() {
                   href={link.url}
                   target="_blank"
                   rel="noreferrer"
-                  className="text-violet-400 hover:underline break-words"
+                  className="text-violet-400 hover:underline truncate max-w-xs sm:max-w-md"
+                  title={link.url}
                 >
                   {link.url}
                 </a>

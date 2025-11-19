@@ -81,7 +81,7 @@ export default function Dashboard() {
     <div className="min-h-screen bg-bg text-text">
       <main className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8">
         {/* Page Title */}
-        <h1 className="text-3xl font-semibold tracking-tight mb-8 text-accent">
+        <h1 className="text-3xl font-semibold tracking-tight mb-8 text-violet-900">
           Your Links
         </h1>
 

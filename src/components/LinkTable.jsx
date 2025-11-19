@@ -25,7 +25,7 @@ function LinkRowCard({ link, handleDeleteRequest, handleCopy }) {
         {/* Target URL */}
         <div className="space-y-1">
           <span className="font-bold text-gray-300 block">Target URL</span>
-          <p className="text-gray-300 break-words text-right">{link.url}</p>
+          <p className="text-gray-300 truncate text-right" title={link.url}>{link.url}</p>
         </div>
         
         {/* Clicks & Last Clicked */}
@@ -81,7 +81,7 @@ function LinkTableRow({ link, handleDeleteRequest, handleCopy }) {
     // This is visible only on large screens, maintaining the original table structure
     <tr key={link.code} className="hidden sm:table-row border-b border-gray-700 last:border-b-0">
       <td className="py-3 px-2 font-medium text-violet-700">{link.code}</td>
-      <td className="py-3 px-2 max-w-[50ch] wrap-break-word text-gray-300">{link.url}</td>
+      <td className="py-3 px-2 max-w-[50ch] truncate text-gray-300" title={link.url}>{link.url}</td>
       <td className="py-3 px-2 text-gray-300">{link.clicks ?? 0}</td>
       <td className="py-3 px-2 text-gray-300">{formatDate(link.last_clicked)}</td>
       <td className="py-3 px-2">
