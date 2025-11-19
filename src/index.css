@@ -1,0 +1,10 @@
+@import "tailwindcss";
+
+
+@theme {
+  --color-accent: #a78bfa;    /* Violet-400 */
+  --color-bg: #1c1c1e;        /* Notion dark-ish */
+  --color-card: #2a2a2d;
+  --color-text: #e5e5e7;
+  --color-subtle: #b3b3b8;
+}
