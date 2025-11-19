@@ -84,7 +84,7 @@ export default function Dashboard() {
   
 
   return (
-    <div className="min-h-screen bg-[#141414] text-text">
+    <div className="min-h-screen bg-bg text-text">
       <main className="1 max-w-6xl mx-auto px-6 bg-bg">
         {/* Page Title */}
         <h1 className="text-3xl font-semibold tracking-tight mb-8 text-accent">
