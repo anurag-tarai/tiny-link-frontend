@@ -37,8 +37,8 @@ export default function AddLinkForm({ onCreate }) {
   }
 
   return (
-    <form onSubmit={handleSubmit} className="bg-white p-4 rounded-lg shadow">
-      <h3 className="font-semibold mb-2">Create Short Link</h3>
+    <form onSubmit={handleSubmit} className="bg-card p-4 rounded-lg shadow">
+      <h3 className="font-semibold mb-2 text-accent">Create Short Link</h3>
 
       <label className="block mb-2 text-sm text-slate-600">Long URL</label>
       <input
@@ -63,7 +63,7 @@ export default function AddLinkForm({ onCreate }) {
       <button
         type="submit"
         disabled={loading}
-        className="bg-violet-900 text-white px-4 py-2 rounded disabled:opacity-60 hover:bg-violet-900"
+        className="bg-violet-900 text-white px-4 py-2 rounded disabled:opacity-60 hover:bg-violet-900 cursor-pointer"
       >
         {loading ? "Creating..." : "Create Short Link"}
       </button>

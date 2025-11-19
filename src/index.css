@@ -1,10 +1,19 @@
 @import "tailwindcss";
 
-
 @theme {
-  --color-accent: #a78bfa;    /* Violet-400 */
-  --color-bg: #1c1c1e;        /* Notion dark-ish */
-  --color-card: #2a2a2d;
-  --color-text: #e5e5e7;
-  --color-subtle: #b3b3b8;
+  /* --- Primary Background & Containers --- */
+  --color-bg: #0d0d0d;        /* Even Darker Gray/Near-Black (Original was #141414) */
+  --color-card: #181818;      /* Darker Card Background (Original was #1f1f1f) */
+
+  /* --- Text & Typography --- */
+  --color-text: #e5e5e7;      /* Near White (Primary Text) */
+  --color-subtle: #9ca3af;    /* Gray-400 (Secondary text, placeholders, table headers) */
+
+  /* --- Accent Colors (Purple) --- */
+  --color-accent: #a78bfa;    /* Violet-400 (Used for titles and link code text) */
+  --color-action: #8b5cf6;    /* Violet-600 (Used for active buttons and card borders) */
+
+  /* --- Status Colors --- */
+  --color-success: #4ade80;   /* Green-400 (For "Health: OK") */
+  --color-error: #f87171;     /* Red-400 (For delete buttons and "Health: DOWN") */
 }

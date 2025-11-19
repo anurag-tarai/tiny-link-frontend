@@ -1,6 +1,7 @@
 import { useState } from "react";
 import { useToast } from "../components/ToastContext";
 import ConfirmationModal from "./ConfirmationModal";
+import { Link } from "react-router-dom";
 
 function formatDate(ts) {
   if (!ts) return "-";
@@ -63,15 +64,15 @@ export default function LinksTable({ links, onDelete }) {
           placeholder="Search by code or URL..."
           value={filter}
           onChange={(e) => setFilter(e.target.value)}
-          className="p-3 border border-gray-300 rounded-lg w-full md:w-72 focus:outline-none focus:ring-2 focus:ring-violet-400"
+          className="p-3 border border-gray-700 rounded-lg w-full md:w-72 focus:outline-none focus:ring-2 focus:ring-violet-400"
         />
-        <div className="text-sm text-slate-500">{filtered.length} result(s)</div>
+        <div className="text-sm text-gray-300">{filtered.length} result(s)</div>
       </div>
 
       {/* Table Card */}
       <div className="overflow-x-auto bg-card p-6 rounded-2xl shadow-lg border border-white/10">
         <table className="w-full text-sm table-auto border-collapse">
-          <thead className="text-slate-400 uppercase text-left">
+          <thead className="text-gray-300 uppercase text-left">
             <tr>
               <th className="py-3 px-2">Code</th>
               <th className="py-3 px-2">Target URL</th>
@@ -84,16 +85,16 @@ export default function LinksTable({ links, onDelete }) {
             {filtered.map((link) => (
               <tr key={link.code}>
                 <td className="py-3 px-2 font-medium text-violet-700">{link.code}</td>
-                <td className="py-3 px-2 max-w-[50ch] break-words text-slate-700">{link.url}</td>
-                <td className="py-3 px-2 text-slate-600">{link.clicks ?? 0}</td>
-                <td className="py-3 px-2 text-slate-600">{formatDate(link.last_clicked)}</td>
+                <td className="py-3 px-2 max-w-[50ch] wrap-break-word text-gray-300">{link.url}</td>
+                <td className="py-3 px-2 text-gray-300">{link.clicks ?? 0}</td>
+                <td className="py-3 px-2 text-gray-300">{formatDate(link.last_clicked)}</td>
                 <td className="py-3 px-2 flex flex-wrap gap-2">
-                  <a
-                    href={`/code/${link.code}`}
+                  <Link
+                    to={`/code/${link.code}`}
                     className="px-3 py-1 rounded-xl bg-violet-900 hover:bg-violet-700 text-white text-xs transition"
                   >
                     Stats
-                  </a>
+                  </Link>
                   <a
                     href={link.shortUrl}
                     target="_blank"
@@ -104,7 +105,7 @@ export default function LinksTable({ links, onDelete }) {
                   </a>
                   <button
                     onClick={() => handleCopy(link.shortUrl)}
-                    className="px-3 py-1 rounded-xl bg-gray-200 hover:bg-gray-700 text-gray-800 text-xs transition cursor-pointer"
+                    className="px-3 py-1 rounded-xl bg-gray-600 text-white hover:bg-gray-500 text-gray-800 text-xs transition cursor-pointer"
                   >
                     Copy
                   </button>
@@ -119,7 +120,7 @@ export default function LinksTable({ links, onDelete }) {
             ))}
             {filtered.length === 0 && (
               <tr>
-                <td colSpan="5" className="py-6 text-center text-slate-400 italic">
+                <td colSpan="5" className="py-6 text-center text-gray-300 italic">
                   No links found.
                 </td>
               </tr>

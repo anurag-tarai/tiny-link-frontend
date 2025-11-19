@@ -11,6 +11,31 @@ export default function Dashboard() {
   const [err, setErr] = useState("");
   const { addToast } = useToast(); // Toast function
 
+  // inside your Dashboard component
+  const [health, setHealth] = useState(null);
+
+  async function checkHealth() {
+    try {
+      const res = await fetch(`${import.meta.env.VITE_API_BASE}/healthz`);
+      const data = await res.json();
+      // assuming backend sends uptime in seconds (if not, we just skip it)
+      setHealth({
+        ok: data.ok,
+        version: data.version || "unknown",
+        uptime: data.uptime || 0,
+      });
+    } catch (e) {
+      setHealth({ ok: false, version: "unknown", uptime: 0 });
+    }
+  }
+
+  useEffect(() => {
+    checkHealth();
+    // optional: refresh every 30 seconds
+    const interval = setInterval(checkHealth, 30000);
+    return () => clearInterval(interval);
+  }, []);
+
   // Load all links
   async function load() {
     setLoading(true);
@@ -55,37 +80,58 @@ export default function Dashboard() {
     }
   }
 
+  console.log(health);
+  
+
   return (
-    <div className="min-h-screen bg-bg text-text">
-      <main className="max-w-6xl mx-auto px-6 py-10">
+    <div className="min-h-screen bg-[#141414] text-text">
+      <main className="1 max-w-6xl mx-auto px-6 bg-bg">
         {/* Page Title */}
-        <h1 className="text-3xl font-semibold tracking-tight mb-8 text-violet-900">
+        <h1 className="text-3xl font-semibold tracking-tight mb-8 text-accent">
           Your Links
         </h1>
 
         {/* 2 Column Layout */}
         <div className="grid md:grid-cols-2 gap-8">
           {/* Create Link Form */}
-          <div className="bg-card p-6 rounded-2xl shadow-lg border-2 border-l-violet-950">
+          <div className="bg-card p-6 rounded-2xl shadow-lg border-2 border-l-violet-700">
             <AddLinkForm onCreate={handleCreate} />
           </div>
 
           {/* System Card */}
-          <div className="bg-card p-6 rounded-2xl shadow-lg border-2 border-r-violet-950">
-            <h3 className="text-lg font-medium mb-3 text-accent">System Status</h3>
+          <div className="bg-card p-6 rounded-2xl shadow-lg border-2 border-r-violet-700">
+            <h3 className="text-lg font-medium mb-3 text-accent">
+              Healthcheck
+            </h3>
 
-            <p className="text-subtle text-sm">
-              Health: <span className="text-text font-semibold">OK</span>
-            </p>
+            {!health ? (
+              <p className="text-subtle text-sm">Health: <span className="font-semibold">Checking...</span></p>
+            ) : (
+              <>
+                <p className="text-subtle text-sm">
+                  Health:{" "}
+                  <span
+                    className={
+                      health.ok
+                        ? "text-green-500 font-semibold"
+                        : "text-red-500 font-semibold"
+                    }
+                  >
+                    {health.ok ? "OK" : "DOWN"}
+                  </span>
+                </p>
 
-            <p className="text-subtle text-sm mt-1">
-              Backend: {import.meta.env.VITE_API_BASE || "default"}
-            </p>
+                <p className="text-subtle text-sm mt-1">
+                  Version: <span className="font-semibold">{health.version}</span>
+                </p>
 
-            <p className="text-subtle text-sm mt-6 leading-relaxed">
-              Codes must be <strong>6–8 alphanumeric</strong>.  
-              Duplicate custom codes return <strong>409</strong>.
-            </p>
+                {health.uptime > 0 && (
+                  <p className="text-subtle text-sm mt-1">
+                    Uptime: <span className="font-semibold">{Math.floor(health.uptime / 60)} min</span>
+                  </p>
+                )}
+              </>
+            )}
           </div>
         </div>
 
