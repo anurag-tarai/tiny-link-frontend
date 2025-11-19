@@ -19,16 +19,16 @@ export default function StatsPage() {
   }, [code]);
 
   return (
-    <div className="min-h-screen bg-bg text-text">
+    <div className="min-h-screen bg-bg text-text ">
 
 
-      <main className="max-w-3xl mx-auto px-6 py-10">
-        <div className="bg-card p-6 rounded-2xl shadow-lg border border-white/5">
+      <main className="max-w-3xl mx-auto px-6 py-10 ">
+        <div className="bg-card border-2 border-violet-950  p-6 rounded-2xl shadow-lg">
           {/* Header */}
           <div className="flex items-center justify-between mb-6">
             <h2 className="text-2xl font-semibold tracking-tight text-violet-900">
   Stats for:{" "}
-  <span className="font-mono bg-violet-800 text-violet-100 px-2 py-1 rounded">
+  <span className="font-mono bg-violet-900/45 border-2 border-violet-950 text-violet-100 px-2 py-1 rounded">
     {code}
   </span>
 </h2>

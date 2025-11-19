@@ -90,7 +90,7 @@ export default function LinksTable({ links, onDelete }) {
                 <td className="py-3 px-2 flex flex-wrap gap-2">
                   <a
                     href={`/code/${link.code}`}
-                    className="px-3 py-1 rounded-xl bg-violet-600 hover:bg-violet-500 text-white text-xs transition"
+                    className="px-3 py-1 rounded-xl bg-violet-900 hover:bg-violet-700 text-white text-xs transition"
                   >
                     Stats
                   </a>
@@ -98,19 +98,19 @@ export default function LinksTable({ links, onDelete }) {
                     href={link.shortUrl}
                     target="_blank"
                     rel="noreferrer"
-                    className="px-3 py-1 rounded-xl bg-sky-600 hover:bg-sky-500 text-white text-xs transition"
+                    className="px-3 py-1 rounded-xl  bg-violet-900 hover:bg-violet-700  text-white text-xs transition"
                   >
-                    Open
+                    Open 🔗
                   </a>
                   <button
                     onClick={() => handleCopy(link.shortUrl)}
-                    className="px-3 py-1 rounded-xl bg-gray-200 hover:bg-gray-300 text-gray-800 text-xs transition"
+                    className="px-3 py-1 rounded-xl bg-gray-200 hover:bg-gray-700 text-gray-800 text-xs transition cursor-pointer"
                   >
                     Copy
                   </button>
                   <button
                     onClick={() => handleDeleteRequest(link)}
-                    className="px-3 py-1 rounded-xl bg-red-600 hover:bg-red-500 text-white text-xs transition"
+                    className="px-3 py-1 rounded-xl bg-red-600 hover:bg-red-500 text-white text-xs transition cursor-pointer"
                   >
                     Delete
                   </button>
