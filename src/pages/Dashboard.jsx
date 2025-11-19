@@ -3,19 +3,25 @@ import { createLink, deleteLink, getAllLinks } from "../api";
 import Navbar from "../components/Navbar";
 import AddLinkForm from "../components/AddLinkForm";
 import LinksTable from "../components/LinkTable";
+import { useToast } from "../components/ToastContext"; // Import toast hook
 
 export default function Dashboard() {
   const [links, setLinks] = useState([]);
   const [loading, setLoading] = useState(false);
   const [err, setErr] = useState("");
+  const { addToast } = useToast(); // Toast function
 
+  // Load all links
   async function load() {
     setLoading(true);
     setErr("");
     try {
-      setLinks(await getAllLinks());
+      const allLinks = await getAllLinks();
+      setLinks(allLinks);
     } catch (e) {
-      setErr(e?.response?.data?.error || "Failed to fetch links");
+      const errorMsg = e?.response?.data?.error || "Failed to fetch links";
+      setErr(errorMsg);
+      addToast(errorMsg, "error");
     } finally {
       setLoading(false);
     }
@@ -25,24 +31,32 @@ export default function Dashboard() {
     load();
   }, []);
 
+  // Create a new link
   async function handleCreate(payload) {
-    await createLink(payload);
-    await load();
+    try {
+      await createLink(payload);
+      addToast(`Link created successfully!`, "success");
+      await load();
+    } catch (e) {
+      const errorMsg = e?.response?.data?.error || "Failed to create link";
+      addToast(errorMsg, "error");
+    }
   }
 
+  // Delete a link
   async function handleDelete(code) {
     try {
       await deleteLink(code);
+      addToast(`Link ${code} deleted successfully`, "success");
       await load();
     } catch (e) {
-      alert(e?.response?.data?.error || "Delete failed");
+      const errorMsg = e?.response?.data?.error || "Delete failed";
+      addToast(errorMsg, "error");
     }
   }
 
   return (
     <div className="min-h-screen bg-bg text-text">
-      <Navbar />
-
       <main className="max-w-6xl mx-auto px-6 py-10">
         {/* Page Title */}
         <h1 className="text-3xl font-semibold tracking-tight mb-8 text-violet-900">
@@ -51,16 +65,15 @@ export default function Dashboard() {
 
         {/* 2 Column Layout */}
         <div className="grid md:grid-cols-2 gap-8">
-          
           {/* Create Link Form */}
-          <div className="bg-card p-6 rounded-2xl shadow-lg border-2 border-l-violet-950 ">
+          <div className="bg-card p-6 rounded-2xl shadow-lg border-2 border-l-violet-950">
             <AddLinkForm onCreate={handleCreate} />
           </div>
 
           {/* System Card */}
-          <div className="bg-card p-6 rounded-2xl shadow-lg border-2  border-r-violet-950">
+          <div className="bg-card p-6 rounded-2xl shadow-lg border-2 border-r-violet-950">
             <h3 className="text-lg font-medium mb-3 text-accent">System Status</h3>
-            
+
             <p className="text-subtle text-sm">
               Health: <span className="text-text font-semibold">OK</span>
             </p>

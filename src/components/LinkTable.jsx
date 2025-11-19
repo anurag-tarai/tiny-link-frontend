@@ -1,4 +1,6 @@
 import { useState } from "react";
+import { useToast } from "../components/ToastContext";
+import ConfirmationModal from "./ConfirmationModal";
 
 function formatDate(ts) {
   if (!ts) return "-";
@@ -8,55 +10,87 @@ function formatDate(ts) {
 
 export default function LinksTable({ links, onDelete }) {
   const [filter, setFilter] = useState("");
+  const { addToast } = useToast();
+  const [isModalOpen, setIsModalOpen] = useState(false);
+  const [linkToDelete, setLinkToDelete] = useState(null);
 
-  const filtered = links.filter(l =>
-    l.code.toLowerCase().includes(filter.toLowerCase()) ||
-    (l.url || "").toLowerCase().includes(filter.toLowerCase())
+  const filtered = links.filter(
+    (l) =>
+      l.code.toLowerCase().includes(filter.toLowerCase()) ||
+      (l.url || "").toLowerCase().includes(filter.toLowerCase())
   );
 
   async function handleCopy(text) {
     try {
       await navigator.clipboard.writeText(text);
-      alert("Copied to clipboard");
+      addToast("Copied to clipboard!", "success");
     } catch {
-      alert("Copy failed");
+      addToast("Copy failed!", "error");
     }
   }
 
+  const handleDeleteRequest = (link) => {
+    setLinkToDelete(link);
+    setIsModalOpen(true);
+  };
+
+  const handleConfirmDelete = async () => {
+    if (!linkToDelete) return;
+
+    setIsModalOpen(false);
+    // Call Dashboard's handleDelete via onDelete
+    // The Dashboard component will show a toast and reload the links.
+    await onDelete(linkToDelete.code); 
+    setLinkToDelete(null);
+  };
+
   return (
-    <div className="mt-6 bg-white p-4 rounded-lg shadow">
-      <div className="flex items-center justify-between mb-3">
+    <div className="mt-10">
+      <ConfirmationModal
+        isOpen={isModalOpen}
+        onClose={() => {
+          setIsModalOpen(false);
+          setLinkToDelete(null);
+        }}
+        onConfirm={handleConfirmDelete}
+        title="Confirm Deletion"
+        message={`Are you sure you want to delete the link for "${linkToDelete?.code}"? This action cannot be undone.`}
+      />
+
+      {/* Search & Count */}
+      <div className="flex flex-col md:flex-row items-center justify-between mb-4 gap-3">
         <input
           placeholder="Search by code or URL..."
           value={filter}
-          onChange={e => setFilter(e.target.value)}
-          className="p-2 border rounded w-72"
+          onChange={(e) => setFilter(e.target.value)}
+          className="p-3 border border-gray-300 rounded-lg w-full md:w-72 focus:outline-none focus:ring-2 focus:ring-violet-400"
         />
-        <div className="text-sm text-slate-600">{filtered.length} result(s)</div>
+        <div className="text-sm text-slate-500">{filtered.length} result(s)</div>
       </div>
 
-      <div className="overflow-x-auto">
-        <table className="w-full text-sm">
-          <thead className="text-slate-600">
+      {/* Table Card */}
+      <div className="overflow-x-auto bg-card p-6 rounded-2xl shadow-lg border border-white/10">
+        <table className="w-full text-sm table-auto border-collapse">
+          <thead className="text-slate-400 uppercase text-left">
             <tr>
-              <th className="text-left py-2">Code</th>
-              <th className="text-left py-2">Target URL</th>
-              <th className="text-left py-2">Clicks</th>
-              <th className="text-left py-2">Last Clicked</th>
-              <th className="text-left py-2">Actions</th>
+              <th className="py-3 px-2">Code</th>
+              <th className="py-3 px-2">Target URL</th>
+              <th className="py-3 px-2">Clicks</th>
+              <th className="py-3 px-2">Last Clicked</th>
+              <th className="py-3 px-2">Actions</th>
             </tr>
           </thead>
-          <tbody>
-            {filtered.map(link => (
-              <tr key={link.code} className="border-t">
-                <td className="py-3 font-medium">{link.code}</td>
-                <td className="py-3 max-w-[40ch] truncate">{link.url}</td>
-                <td className="py-3">{link.clicks ?? 0}</td>
-                <td className="py-3">{formatDate(link.last_clicked)}</td>
-                <td className="py-3 flex gap-2">
+          <tbody className="divide-y divide-gray-200">
+            {filtered.map((link) => (
+              <tr key={link.code}>
+                <td className="py-3 px-2 font-medium text-violet-700">{link.code}</td>
+                <td className="py-3 px-2 max-w-[50ch] break-words text-slate-700">{link.url}</td>
+                <td className="py-3 px-2 text-slate-600">{link.clicks ?? 0}</td>
+                <td className="py-3 px-2 text-slate-600">{formatDate(link.last_clicked)}</td>
+                <td className="py-3 px-2 flex flex-wrap gap-2">
                   <a
                     href={`/code/${link.code}`}
-                    className="px-3 py-1 rounded bg-slate-700 text-white text-xs"
+                    className="px-3 py-1 rounded-xl bg-violet-600 hover:bg-violet-500 text-white text-xs transition"
                   >
                     Stats
                   </a>
@@ -64,23 +98,19 @@ export default function LinksTable({ links, onDelete }) {
                     href={link.shortUrl}
                     target="_blank"
                     rel="noreferrer"
-                    className="px-3 py-1 rounded bg-sky-600 text-white text-xs"
+                    className="px-3 py-1 rounded-xl bg-sky-600 hover:bg-sky-500 text-white text-xs transition"
                   >
                     Open
                   </a>
                   <button
                     onClick={() => handleCopy(link.shortUrl)}
-                    className="px-3 py-1 rounded bg-slate-200 text-slate-800 text-xs"
+                    className="px-3 py-1 rounded-xl bg-gray-200 hover:bg-gray-300 text-gray-800 text-xs transition"
                   >
                     Copy
                   </button>
                   <button
-                    onClick={() => {
-                      if (confirm(`Delete ${link.code}? This cannot be undone.`)) {
-                        onDelete(link.code);
-                      }
-                    }}
-                    className="px-3 py-1 rounded bg-red-600 text-white text-xs"
+                    onClick={() => handleDeleteRequest(link)}
+                    className="px-3 py-1 rounded-xl bg-red-600 hover:bg-red-500 text-white text-xs transition"
                   >
                     Delete
                   </button>
@@ -88,7 +118,11 @@ export default function LinksTable({ links, onDelete }) {
               </tr>
             ))}
             {filtered.length === 0 && (
-              <tr><td colSpan="5" className="py-6 text-center text-slate-500">No links found.</td></tr>
+              <tr>
+                <td colSpan="5" className="py-6 text-center text-slate-400 italic">
+                  No links found.
+                </td>
+              </tr>
             )}
           </tbody>
         </table>
