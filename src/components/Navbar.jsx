@@ -1,4 +1,5 @@
 import { Link } from "react-router-dom";
+import logo from "../assets/logo.png";
 
 export default function Navbar() {
   
@@ -14,7 +15,7 @@ export default function Navbar() {
       <div className="mx-auto px-4 sm:px-6 py-4 flex items-center justify-between">
         {/* App Name on the left */}
         <div className="flex items-center gap-3">
-          <div className={`font-bold text-2xl text-accent`}>TinyLink</div>
+          <img src={logo} alt="TinyLink Logo" className="h-8 w-auto " />
           {/* Hide the subtitle on small mobile screens to save space */}
           <div className={`text-sm text-subtle hidden sm:block`}>Shorten. Share. Track.</div>
         </div>
